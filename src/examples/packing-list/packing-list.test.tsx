@@ -7,22 +7,46 @@ it('renders the Packing List application', () => {
 
 it('has the correct title', async () => {
   render(<PackingList />);
-  screen.getByText('Packing List');
+  const title = screen.getByText('Packing List');
+  expect(title).toHaveTextContent('Packing List');
 });
 
-it.todo('has an input field for a new item', () => {});
+it('has an input field for a new item', () => {
+  render(<PackingList />);
+  const inputField = screen.getByLabelText('New Item Name');
+  expect(inputField).toBeVisible();
+});
 
-it.todo(
+it(
   'has a "Add New Item" button that is disabled when the input is empty',
-  () => {},
+  () => {
+    render(<PackingList />);
+    const addButton = screen.getByRole('button', { name: 'Add New Item' });
+    expect(addButton).toBeDisabled();
+  },
 );
 
-it.todo(
+it(
   'enables the "Add New Item" button when there is text in the input field',
-  async () => {},
+  async () => {
+    const { user } = render(<PackingList />);
+    const inputField = screen.getByLabelText('New Item Name');
+
+    await user.type(inputField, 'MacBook Pro');
+    const addButton = screen.getByRole('button', { name: 'Add New Item' });
+    expect(addButton).toBeEnabled();
+  },
 );
 
-it.todo(
+it(
   'adds a new item to the unpacked item list when the clicking "Add New Item"',
-  async () => {},
+  async () => {
+    const { user } = render(<PackingList />);
+    const inputField = screen.getByLabelText('New Item Name');
+
+    await user.type(inputField, 'MacBook Pro');
+    const addButton = screen.getByRole('button', { name: 'Add New Item' });
+    await user.click(addButton);
+    expect(screen.getByLabelText('MacBook Pro')).not.toBeChecked();
+  },
 );

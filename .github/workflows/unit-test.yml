@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - name: Checkout and Setup Node
-        uses: ./.github/actions/checkout-and-setup-node
+        uses: actions/setup-node@v3
       - run: npm test -- --coverage
       - uses: actions/upload-artifact@v3
         name: Archive coverage report
